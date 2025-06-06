@@ -1,0 +1,158 @@
+
+Testavimas: Reikalavimų testas 30
+----------------------------------------
+1. Q: What is the first step the logistics assistant takes after receiving a phone call?
+Modelio atsakymas: voice recognition technology
+Tikslus atsakymas: Transform the spoken request into written text
+EM: 0, F1: 0.0, ROUGE-L: 0.0
+
+2. Q: Where is the transformed request stored after speech-to-text conversion?
+Modelio atsakymas: route optimization and task scheduling
+Tikslus atsakymas: In a database
+EM: 0, F1: 0.0, ROUGE-L: 0.0
+
+3. Q: What factor does the assistant use to prioritize delivery routes?
+Modelio atsakymas: priority level specified by the construction manager during the call. Based on these, it schedules the most efficient sequence of deliveries
+Tikslus atsakymas: Proximity of routes and priority level
+EM: 0, F1: 0.222, ROUGE-L: 0.148
+
+4. Q: What data does the assistant send to the suppliers?
+Modelio atsakymas: pickup location, delivery destination, scheduled time, and cargo description
+Tikslus atsakymas: Pickup location, delivery destination, scheduled time, and cargo description
+EM: 1, F1: 1.0, ROUGE-L: 1.0
+
+5. Q: How does the assistant adjust driver schedules?
+Modelio atsakymas: delivery changes
+Tikslus atsakymas: In real time based on delivery changes
+EM: 0, F1: 0.444, ROUGE-L: 0.444
+
+6. Q: Which requirement engineering process helps define how the assistant should behave when a call is received?
+Modelio atsakymas: functional requirements
+Tikslus atsakymas: Functional requirements
+EM: 1, F1: 1.0, ROUGE-L: 1.0
+
+7. Q: What type of requirement involves constraints like legal working hour limits for drivers?
+Modelio atsakymas: Non-functional requirements include constraints like system performance, security, and compliance with regulations
+Tikslus atsakymas: Non-functional requirements
+EM: 0, F1: 0.286, ROUGE-L: 0.375
+
+8. Q: Which technique can be used to derive assistant requirements from stakeholder input?
+Modelio atsakymas: interviews, use case analysis, and prototyping help gather system needs from stakeholders like logistics managers and drivers
+Tikslus atsakymas: Requirements elicitation
+EM: 0, F1: 0.0, ROUGE-L: 0.0
+
+9. Q: Why is traceability important in the logistics assistant's requirement engineering?
+Modelio atsakymas: 
+Tikslus atsakymas: To link requirements to their origin and ensure verification
+EM: 0, F1: 0.0, ROUGE-L: 0
+
+10. Q: What kind of AI technology is used by the assistant to interpret speech from phone calls?
+Modelio atsakymas: logistics
+Tikslus atsakymas: Automatic speech recognition (ASR)
+EM: 0, F1: 0.0, ROUGE-L: 0.0
+
+11. Q: What is used by the assistant to ensure deliveries comply with legal regulations?
+Modelio atsakymas: all required standards
+Tikslus atsakymas: Real-time tracking of legal compliance
+EM: 0, F1: 0.0, ROUGE-L: 0.0
+
+12. Q: Where does the logistics assistant retrieve historical traffic data from?
+Modelio atsakymas: external traffic databases
+Tikslus atsakymas: External traffic databases
+EM: 1, F1: 1.0, ROUGE-L: 1.0
+
+13. Q: How does the assistant handle urgent delivery requests?
+Modelio atsakymas: 
+Tikslus atsakymas: Immediately flagged and prioritized
+EM: 0, F1: 0.0, ROUGE-L: 0
+
+14. Q: What information is crucial for scheduling accurate pickup times?
+Modelio atsakymas: supplier availability, current traffic conditions, and cargo readiness
+Tikslus atsakymas: Supplier availability, current traffic conditions, and cargo readiness
+EM: 1, F1: 1.0, ROUGE-L: 1.0
+
+15. Q: Which document does the assistant generate for drivers after scheduling deliveries?
+Modelio atsakymas: route manifest document
+Tikslus atsakymas: Detailed route manifest
+EM: 0, F1: 0.667, ROUGE-L: 0.667
+
+16. Q: What triggers automatic rescheduling of deliveries by the assistant?
+Modelio atsakymas: The logistics assistant automatically reschedules deliveries in response to detected delays, traffic incidents, or changes in cargo availability
+Tikslus atsakymas: Detected delays, traffic incidents, or cargo availability changes
+EM: 0, F1: 0.615, ROUGE-L: 0.538
+
+17. Q: Which AI method supports dynamic rerouting during unforeseen events?
+Modelio atsakymas: 
+Tikslus atsakymas: Machine learning algorithms
+EM: 0, F1: 0.0, ROUGE-L: 0
+
+18. Q: How often does the logistics assistant update driver schedules?
+Modelio atsakymas: throughout the day
+Tikslus atsakymas: Continuously throughout the day
+EM: 0, F1: 0.857, ROUGE-L: 0.857
+
+19. Q: What feature allows stakeholders to review historical scheduling data?
+Modelio atsakymas: reporting dashboard
+Tikslus atsakymas: Reporting dashboard
+EM: 1, F1: 1.0, ROUGE-L: 1.0
+
+20. Q: What tool does the assistant use to visualize optimized delivery routes?
+Modelio atsakymas: an integrated mapping interface
+Tikslus atsakymas: Integrated mapping interface
+EM: 0, F1: 0.857, ROUGE-L: 0.857
+
+21. Q: What does the assistant monitor to predict delivery delays?
+Modelio atsakymas: traffic patterns, weather forecasts, and historical delivery data
+Tikslus atsakymas: Traffic patterns, weather forecasts, and historical delivery data
+EM: 1, F1: 1.0, ROUGE-L: 1.0
+
+22. Q: What technology is primarily responsible for the logistics assistant's data storage?
+Modelio atsakymas: cloud-based databases
+Tikslus atsakymas: Cloud-based databases
+EM: 1, F1: 1.0, ROUGE-L: 1.0
+
+23. Q: How does the logistics assistant validate delivery completion?
+Modelio atsakymas: digital confirmations
+Tikslus atsakymas: Digital confirmations by recipients
+EM: 0, F1: 0.667, ROUGE-L: 0.667
+
+24. Q: What triggers notifications sent by the assistant to construction managers?
+Modelio atsakymas: automatically when significant schedule changes, delays, or issues arise during delivery processes
+Tikslus atsakymas: Significant schedule changes, delays, or delivery issues
+EM: 0, F1: 0.737, ROUGE-L: 0.632
+
+25. Q: What requirement engineering method helps document user interactions with the assistant?
+Modelio atsakymas: use case analysis
+Tikslus atsakymas: Use case analysis
+EM: 1, F1: 1.0, ROUGE-L: 1.0
+
+26. Q: What is the primary function of the logistics assistant's reporting system?
+Modelio atsakymas: to provide detailed insights into delivery efficiency, compliance adherence, and operational performance
+Tikslus atsakymas: Provide insights into efficiency, compliance, and performance
+EM: 0, F1: 0.632, ROUGE-L: 0.737
+
+27. Q: Which stakeholder input is critical for defining delivery priorities?
+Modelio atsakymas: urgency assessments from construction managers and feedback from logistics coordinators
+Tikslus atsakymas: Urgency assessments and logistics coordinator feedback
+EM: 0, F1: 0.625, ROUGE-L: 0.625
+
+28. Q: What system function helps manage cargo inventory levels?
+Modelio atsakymas: The logistics assistant
+Tikslus atsakymas: Integrated inventory management system
+EM: 0, F1: 0.0, ROUGE-L: 0.0
+
+29. Q: What security feature protects sensitive delivery data?
+Modelio atsakymas: encryption protocols
+Tikslus atsakymas: Encryption protocols and secure authentication
+EM: 0, F1: 0.571, ROUGE-L: 0.571
+
+30. Q: What process does the assistant use to ensure data accuracy?
+Modelio atsakymas: continuous validation checks
+Tikslus atsakymas: Continuous validation checks
+EM: 1, F1: 1.0, ROUGE-L: 1.0
+
+
+BENDRI REZULTATAI (Reikalavimų testas 30):
+ EM: 30.0%
+F1: 53.93%
+ROUGE-L: 53.73%
