@@ -14,7 +14,7 @@ from rouge_score import rouge_scorer
 import time
 
 # -----------------------------
-# 1. Nustatome įrenginį
+# 1. Configuring the device for computation (GPU if available, otherwise CPU)
 # -----------------------------
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")
@@ -22,7 +22,7 @@ print(f"Using device: {device}")
 scorer = rouge_scorer.RougeScorer(['rougeL'], use_stemmer=True)
 
 # -----------------------------
-# 2. Tokenizer ir BERT modelis
+# 2. Tokenizer and BERT model
 # -----------------------------
 tokenizer = BertTokenizerFast.from_pretrained('bert-base-cased')
 max_len = 384
@@ -38,7 +38,7 @@ def prepare_features(example):
         return_offsets_mapping=True
     )
 
-    # Patikriname, ar yra bent vienas atsakymas
+    # Check if there is at least one answer
     if len(example["answers"]["answer_start"]) == 0:
         # Jei nėra atsakymo, grąžiname start/end = 0 (arba pagal poreikį)
         return {
@@ -69,7 +69,7 @@ def prepare_features(example):
 
 
 # -----------------------------
-# 3. Duomenų įkėlimas ir filtravimas
+# 3. Data loading and filtering
 # -----------------------------
 dataset = load_dataset("squad_v2")
 train_data = dataset["train"].select(range(70000))
@@ -78,7 +78,7 @@ train_split, val_split = train_test_split(features, test_size=0.2, random_state=
 
 
 # -----------------------------
-# 4. Modelio klasė
+# 4. Bert model class
 # ----------------------------- 
 class BertQAModel(nn.Module):
     def __init__(self, model_name='bert-base-cased'):
@@ -98,7 +98,7 @@ class BertQAModel(nn.Module):
 
 
 # -----------------------------
-# 5. Dataset klasė
+# 5. Dataset class
 # ----------------------------- 
 class QADataset(Dataset):
     def __init__(self, features):
@@ -119,12 +119,12 @@ class QADataset(Dataset):
 
 train_dataset = QADataset(train_split)
 val_dataset = QADataset(val_split)
-print(f"CPU RAM naudojimas prieš train_loader: {psutil.virtual_memory().used / 1e9:.2f} GB")
+print(f"CPU and RAM usage before train_loader: {psutil.virtual_memory().used / 1e9:.2f} GB")
 train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
 val_loader = DataLoader(val_dataset, batch_size=32)
 
 # -----------------------------
-# 6. Modelio treniravimas
+# 6. Model training
 # -----------------------------
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -170,10 +170,8 @@ def train_model(model, data_loader, optimizer, loss_fn):
     return avg_loss, accuracy
 
 # -----------------------------
-# 7. Mokymo metu išveda metrikas ir įvertina modelio našumą nekeičiant jo svorių
+# 7. Outputs metrics and evaluates model performance during training without modifying weights
 # -----------------------------
-
-
 
 def evaluate(model, data_loader, loss_fn):
     model.eval()
@@ -208,7 +206,7 @@ def evaluate(model, data_loader, loss_fn):
     return avg_loss, accuracy
 
 
-print(f"CPU RAM naudojimas prieš train_model: {psutil.virtual_memory().used / 1e9:.2f} GB")
+print(f"Monitor CPU and RAM usage before train_model: {psutil.virtual_memory().used / 1e9:.2f} GB")
 loss_fn = nn.CrossEntropyLoss()
 
 total_training_time = 0.0
@@ -229,11 +227,11 @@ for epoch in range(EPOCHS):
           f"Train Loss = {train_loss:.4f}, Train Acc = {train_acc:.4f}, "
           f"Val Loss = {val_loss:.4f}, Val Acc = {val_acc:.4f}")
     print(f"Epoch {epoch + 1} trukmė: {epoch_time / 60:.2f} min")
-    print(f"GPU naudota atmintis (maks): {max_memory:.2f} GB")
+    print(f"Used VRAM memory (maks): {max_memory:.2f} GB")
 
-print(f"\nBendras treniravimo laikas: {total_training_time / 60:.2f} min ({total_training_time / 3600:.2f} val)")
+print(f"\nTotal training time: {total_training_time / 60:.2f} min ({total_training_time / 3600:.2f} val)")
 
-# Įkeliam apmokintą modelį ir tokenaizerį
+# Load the trained model and tokenizer
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 model = BertQAModel('bert-base-cased')
@@ -242,13 +240,13 @@ model.to(device)
 model.eval()
 
 tokenizer = BertTokenizerFast.from_pretrained("bert-qa-tokenizer")
-print(f"CPU RAM naudojimas prieš testuojant: {psutil.virtual_memory().used / 1e9:.2f} GB")
+print(f"CPU and RAM usage before testing: {psutil.virtual_memory().used / 1e9:.2f} GB")
 
 # -----------------------------
-# 8. Testuojamas modelis
+# 8. Generate an answer from the question and context
 # -----------------------------
 
-
+# Compute ROUGE-L F1 score between the prediction and ground truth
 def compute_rougeL(prediction, ground_truth):
     scores = scorer.score(ground_truth, prediction)
     return scores['rougeL'].fmeasure
@@ -265,10 +263,7 @@ def get_answer(question, context, max_len=384):
     ).to(device)
 
     with torch.no_grad():
-        start_logits, end_logits = model(
-            input_ids=inputs["input_ids"],
-            attention_mask=inputs["attention_mask"]
-        )
+        start_logits, end_logits = model(input_ids=inputs["input_ids"],attention_mask=inputs["attention_mask"])
 
     start_idx = torch.argmax(start_logits, dim=1).item()
     end_idx = torch.argmax(end_logits, dim=1).item()
@@ -280,7 +275,7 @@ def get_answer(question, context, max_len=384):
     return tokenizer.decode(tokens, skip_special_tokens=True).strip()
 
 # -----------------------------
-# 9. Apskaičiuoti metrikas
+# 9. Function to compute EM and F1 scores
 # -----------------------------
 
 def compute_em_and_f1(prediction, ground_truth):
@@ -303,10 +298,10 @@ def compute_em_and_f1(prediction, ground_truth):
     f1 = 2 * precision * recall / (precision + recall)
     return em, f1
 # -----------------------------
-# 10. Įkeliamas failas testavimui
+# 10. Function to test the model using JSON format
 # -----------------------------
 
-def evaluate_bert_model(path, label=None, output_file="rezultatai.txt"):
+def evaluate_bert_model(path, label=None, output_file="results.txt"):
     em_list = []
     f1_list = []
     rougeL_list = []
@@ -316,10 +311,10 @@ def evaluate_bert_model(path, label=None, output_file="rezultatai.txt"):
         with open(path, "r", encoding="utf-8") as f:
             test_data = json.load(f)
     except Exception as e:
-        print(f"Klaida skaitant {path}: {e}")
+        print(f"Error while reading {path}: {e}")
         return
 
-    header = f"\nTestavimas: {label or path}\n{'-' * 40}"
+    header = f"\nTesting: {label or path}\n{'-' * 40}"
     print(header)
     output_lines.append(header)
 
@@ -338,8 +333,8 @@ def evaluate_bert_model(path, label=None, output_file="rezultatai.txt"):
 
         result_str = (
             f"{i + 1}. Q: {question}\n"
-            f"Modelio atsakymas: {predicted}\n"
-            f"Tikslus atsakymas: {expected}\n"
+            f"Model answer: {predicted}\n"
+            f"Exact answer: {expected}\n"
             f"EM: {em}, F1: {round(f1, 3)}, ROUGE-L: {round(rougeL, 3)}\n"
         )
         print(result_str)
@@ -350,7 +345,7 @@ def evaluate_bert_model(path, label=None, output_file="rezultatai.txt"):
     avg_rougeL = sum(rougeL_list) / len(rougeL_list) if rougeL_list else 0.0
 
     summary = (
-        f"\nBENDRI REZULTATAI ({label or path}):\n"
+        f"\nTotal results ({label or path}):\n"
         f" EM: {round(avg_em * 100, 2)}%\n"
         f"F1: {round(avg_f1 * 100, 2)}%\n"
         f"ROUGE-L: {round(avg_rougeL * 100, 2)}%\n"
@@ -360,15 +355,15 @@ def evaluate_bert_model(path, label=None, output_file="rezultatai.txt"):
 
     try:
         Path(output_file).write_text("\n".join(output_lines), encoding="utf-8")
-        print(f"Rezultatai įrašyti į: {output_file}")
+        print(f"Results saved to: {output_file}")
     except Exception as e:
-        print(f"Klaida įrašant rezultatus: {e}")
+        print(f"Error while saving results: {e}")
 
 
-print(f"CPU RAM naudojimas prieš evaluate_lstm_model: {psutil.virtual_memory().used / 1e9:.2f} GB")
+print(f"CPU and RAM usage before evaluate_lstm_model: {psutil.virtual_memory().used / 1e9:.2f} GB")
 
 
-evaluate_bert_model("reikalavimu-testas-30.json", label="Reikalavimų testas 30",
-                    output_file="reikalavimu_rezultatai-30-bert.txt")
+evaluate_bert_model("requirements-test-30.json", label="Requirements test 30",
+                    output_file="requirement_results-30-bert.txt")
 
-print("Darbas baigtas Bert")
+print("BERT processing complete")
