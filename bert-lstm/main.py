@@ -15,21 +15,21 @@ from rouge_score import rouge_scorer
 import time
 
 # -----------------------------
-# 1. Nustatome įrenginį
+# 1. Configuring the device for computation (GPU if available, otherwise CPU)
 # -----------------------------
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")
 scorer = rouge_scorer.RougeScorer(['rougeL'], use_stemmer=True)
 
 # -----------------------------
-# 2. Tokenizer ir BERT modelis
+# 2. Tokenizer and BERT model
 # -----------------------------
 tokenizer = BertTokenizerFast.from_pretrained("bert-base-cased")
 bert_model = BertModel.from_pretrained("bert-base-cased").to(device)
 bert_model.eval()
 
 # -----------------------------
-# 3. Duomenų įkėlimas ir filtravimas
+# 3. Data loading and filtering
 # -----------------------------
 dataset = load_dataset("squad_v2")
 train_data = dataset["train"].select(range(70000))  # Galima keisti į daugiau
@@ -40,11 +40,11 @@ filtered_data = [
        and isinstance(ex["answers"]["answer_start"], list) and len(ex["answers"]["answer_start"]) > 0
 ]
 
-print(f"Naudojama įrašų: {len(filtered_data)}")
+print(f"Records used: {len(filtered_data)}")
 
 
 # -----------------------------
-# 4. BERT embedding'ų generavimas į diską (STREAM)
+# 4. Generating and streaming BERT embeddings to disk
 # -----------------------------
 def generate_embeddings_stream(data, tokenizer, model, max_len=256, batch_size=16, out_dir="embeddings"):
     device = next(model.parameters()).device
@@ -96,10 +96,10 @@ def generate_embeddings_stream(data, tokenizer, model, max_len=256, batch_size=1
             np.save(os.path.join(out_dir, f"y_end_{embedding_idx}.npy"), np.array([end_token]))
             embedding_idx += 1
 
-    print(f"Embedding'ai sugeneruoti! Išsaugoti {embedding_idx} įrašai į katalogą '{out_dir}'.")
+    print(f"Embeddings have been generated and saved {embedding_idx} records saved to folder '{out_dir}'.")
 
 
-# Paleidimas
+# Execution
 generate_embeddings_stream(
     data=filtered_data,
     tokenizer=tokenizer,
@@ -109,11 +109,11 @@ generate_embeddings_stream(
     out_dir="embeddings"
 )
 
-print(f"CPU RAM naudojimas po generate_embeddings: {psutil.virtual_memory().used / 1e9:.2f} GB")
+print(f"CPU and RAM usage after generate_embeddings: {psutil.virtual_memory().used / 1e9:.2f} GB")
 
 
 # -----------------------------
-# 5. Dataset klasė
+# 5. Dataset class
 # -----------------------------
 class QADiskDataset(Dataset):
     def __init__(self, data_dir):
@@ -135,7 +135,7 @@ class QADiskDataset(Dataset):
 
 
 # -----------------------------
-# 6. LSTM modelis
+# 6. LSTM model
 # -----------------------------
 class QALSTMModel(nn.Module):
     def __init__(self, input_size=768, lstm1_size=512, lstm2_size=256, lstm3_size=256, dense_size=256):
@@ -162,7 +162,7 @@ class QALSTMModel(nn.Module):
 
 
 # -----------------------------
-# 7. Modelio treniravimas
+# 7. Model training
 # -----------------------------
 dataset = QADiskDataset(data_dir="embeddings")
 train_size = int(0.8 * len(dataset))
@@ -204,7 +204,7 @@ for epoch in range(EPOCHS):
         optimizer.step()
         total_loss += loss.item()
 
-        # Train Accuracy skaičiavimas
+        # Train Accuracy counting
         start_preds = torch.argmax(start_logits, dim=1)
         end_preds = torch.argmax(end_logits, dim=1)
         correct_start_train += (start_preds == y_start_batch).sum().item()
@@ -248,19 +248,19 @@ for epoch in range(EPOCHS):
     print(f"Epoch {epoch + 1}/{EPOCHS}")
     print(
         f"Train Loss: {avg_train_loss:.4f} | Train Acc: {train_acc:.4f} | Val Loss: {avg_val_loss:.4f} | Val Acc: {avg_val_acc:.4f}")
-    print(f"GPU naudota atmintis (maks): {max_memory:.2f} GB")
-    print(f"Epoch laikas: {epoch_time / 60:.2f} min")
+    print(f"Used VRAM memory (maks): {max_memory:.2f} GB")
+    print(f"Epoch duration: {epoch_time / 60:.2f} min")
 
     if avg_val_loss < best_val_loss:
         best_val_loss = avg_val_loss
         torch.save(model.state_dict(), "best_qa_lstm_model.pt")
-        print("Modelis išsaugotas.")
-print(f"\nBendras treniravimo laikas: {total_training_time / 60:.2f} min ({total_training_time / 3600:.2f} val)")
+        print("Model saved.")
+print(f"\nTotal training time: {total_training_time / 60:.2f} min ({total_training_time / 3600:.2f} val)")
 
 shutil.rmtree("embeddings")
-print("Katalogas 'embeddings' ištrintas.")
+print("Embeddings' directory deleted.")
 # -------------------------------------
-# 8. Įkeliame apmokytą modelį ir BERT encoderį
+# 8. Loading the trained model and BERT encode
 # -------------------------------------
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -274,10 +274,10 @@ bert_model.eval()
 
 
 # -------------------------------------
-# 9. Funkcija: generuoti atsakymą iš klausimo ir konteksto
+# 9. Generate an answer from the question and context
 # -------------------------------------
 
-
+# Compute ROUGE-L F1 score between the prediction and ground truth
 def compute_rougeL(prediction, ground_truth):
     scores = scorer.score(ground_truth, prediction)
     return scores['rougeL'].fmeasure
@@ -308,7 +308,7 @@ def get_lstm_answer(question, context, max_len=384):
         start_index = torch.argmax(start_logits, dim=1).item()
         end_index = torch.argmax(end_logits, dim=1).item()
 
-    # Validuojame, ar indeksai galioja
+    # Validate that the indices are valid
     if start_index > end_index or sequence_ids[start_index] != 1 or sequence_ids[end_index] != 1:
         return ""
 
@@ -318,7 +318,7 @@ def get_lstm_answer(question, context, max_len=384):
 
 
 # -------------------------------------
-# 10. Funkcija: EM ir F1 skaičiavimas
+# 10. Function to compute EM and F1 scores
 # -------------------------------------
 def compute_em_and_f1(prediction, ground_truth):
     def normalize(text):
@@ -342,9 +342,9 @@ def compute_em_and_f1(prediction, ground_truth):
 
 
 # -------------------------------------
-# 11. Funkcija: modelio testavimas JSON formatu
+# 11. Function to test the model using JSON format
 # -------------------------------------
-def evaluate_lstm_model(path, label=None, output_file="rezultatai.txt"):
+def evaluate_lstm_model(path, label=None, output_file="results.txt"):
     em_list = []
     f1_list = []
     rougeL_list = []
@@ -354,10 +354,10 @@ def evaluate_lstm_model(path, label=None, output_file="rezultatai.txt"):
         with open(path, "r", encoding="utf-8") as f:
             test_data = json.load(f)
     except Exception as e:
-        print(f"Klaida skaitant {path}: {e}")
+        print(f"Error while reading {path}: {e}")
         return
 
-    header = f"\nTestavimas: {label or path}\n{'-' * 40}"
+    header = f"\nTesting: {label or path}\n{'-' * 40}"
     print(header)
     output_lines.append(header)
 
@@ -376,8 +376,8 @@ def evaluate_lstm_model(path, label=None, output_file="rezultatai.txt"):
 
         result_str = (
             f"{i + 1}. Q: {question}\n"
-            f"Modelio atsakymas: {predicted}\n"
-            f"Tikslus atsakymas: {expected}\n"
+            f"Model answer: {predicted}\n"
+            f"Exact answer: {expected}\n"
             f"EM: {em}, F1: {round(f1, 3)}, ROUGE-L: {round(rougeL, 3)}\n"
         )
         print(result_str)
@@ -388,7 +388,7 @@ def evaluate_lstm_model(path, label=None, output_file="rezultatai.txt"):
     avg_rougeL = sum(rougeL_list) / len(rougeL_list) if rougeL_list else 0.0
 
     summary = (
-        f"\nBENDRI REZULTATAI ({label or path}):\n"
+        f"\nTotal results ({label or path}):\n"
         f" EM: {round(avg_em * 100, 2)}%\n"
         f"F1: {round(avg_f1 * 100, 2)}%\n"
         f"ROUGE-L: {round(avg_rougeL * 100, 2)}%\n"
@@ -398,26 +398,20 @@ def evaluate_lstm_model(path, label=None, output_file="rezultatai.txt"):
 
     try:
         Path(output_file).write_text("\n".join(output_lines), encoding="utf-8")
-        print(f"Rezultatai įrašyti į: {output_file}")
+        print(f"Results saved to: {output_file}")
     except Exception as e:
-        print(f"Klaida įrašant rezultatus: {e}")
+        print(f"Error while saving results: {e}")
 
 
-# -------------------------------------
-# 12. RAM patikrinimas
-# -------------------------------------
 
-print(f"CPU RAM naudojimas prieš evaluate_lstm_model: {psutil.virtual_memory().used / 1e9:.2f} GB")
+print(f"CPU and RAM usage before evaluate_lstm_model: {psutil.virtual_memory().used / 1e9:.2f} GB")
 
 # -------------------------------------
-# 13. Paleidimas su JSON testu
+# 12. Executing the test function using a JSON-formatted test
 # -------------------------------------
-# Testo failas turi būti JSON formatu:
-# [
-#   {"question": "Klausimas 1", "context": "Kontekstas 1", "expected_answer": "teisingas atsakymas 1"},
-#   {"question": "Klausimas 2", "context": "Kontekstas 2", "expected_answer": "teisingas atsakymas 2"},
 
-evaluate_lstm_model("reikalavimu-testas-30.json", label="Reikalavimų testas 30",
-                    output_file="reikalavimu_rezultatai-30-LSTM.txt")
 
-print("Darbas baigtas Bert+LSTM")
+evaluate_lstm_model("requirements-test-30.json", label="Requirements test 30",
+                    output_file="requirement_results-30-LSTM.txt")
+
+print("Bert+LSTM process finished")
