@@ -21,21 +21,21 @@ from pathlib import Path
 import time
 
 # -----------------------------
-# 1. Nustatome įrenginį
+# 1. Configuring the device for computation (GPU if available, otherwise CPU)
 # -----------------------------
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print(f"Naudojamas įrenginys: {device}")
+print(f"Using device: {device}")
 scorer = rouge_scorer.RougeScorer(['rougeL'], use_stemmer=True)
 # -----------------------------
-# 2. Duomenų įkėlimas ir filtravimas
+# 2. Data loading and filtering
 # -----------------------------
 dataset = load_dataset("squad_v2")
 train_data = dataset["train"].select(range(70000))
 tokenizer = DistilBertTokenizerFast.from_pretrained("distilbert-base-cased")
-print(f"CPU RAM naudojimas po dataset: {psutil.virtual_memory().used / 1e9:.2f} GB")
+print(f"CPU and RAM usage after dataset: {psutil.virtual_memory().used / 1e9:.2f} GB")
 
 # -----------------------------
-# 3. Duomenų paruošimas
+# 3. Data preparing
 # -----------------------------
 
 def prepare_features(example):
@@ -52,7 +52,7 @@ def prepare_features(example):
     offset_mapping = encoding["offset_mapping"][0].tolist()
     sequence_ids = encoding.sequence_ids(0)
 
-    # Apsauga, jei nėra atsakymo
+    # Handle missing answer
     if len(example["answers"]["answer_start"]) == 0:
         return {
             "input_ids": encoding["input_ids"].squeeze(),
@@ -92,17 +92,17 @@ def prepare_features(example):
         "end_positions": end_token
     }
 # -----------------------------
-# 4. Modelio paruošimas ir treniravimas
+# 4. Model preparing and training
 # -----------------------------
 
-# Apdorojame visus pavyzdžius
+# Process all examples
 encoded_data = [prepare_features(ex) for ex in train_data]
 input_ids = torch.tensor([ex["input_ids"].tolist() for ex in encoded_data])
 attention_mask = torch.tensor([ex["attention_mask"].tolist() for ex in encoded_data])
 start_positions = torch.tensor([ex["start_positions"] for ex in encoded_data])
 end_positions = torch.tensor([ex["end_positions"] for ex in encoded_data])
 
-# Padaliname į train/val
+# Split into train and validation sets
 dataset_torch = torch.utils.data.TensorDataset(input_ids, attention_mask, start_positions, end_positions)
 train_size = int(0.8 * len(dataset_torch))
 val_size = len(dataset_torch) - train_size
@@ -110,9 +110,9 @@ train_dataset, val_dataset = torch.utils.data.random_split(dataset_torch, [train
 
 train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
 val_loader = DataLoader(val_dataset, batch_size=32)
-print(f"CPU RAM naudojimas po train_loader: {psutil.virtual_memory().used / 1e9:.2f} GB")
+print(f"CPU and RAM usage after train_loader: {psutil.virtual_memory().used / 1e9:.2f} GB")
 
-# Sukuriame modelį
+
 model = DistilBertForQuestionAnswering.from_pretrained("distilbert-base-cased").to(device)
 
 # Optimizer ir scheduler
@@ -188,7 +188,7 @@ def evaluate_model(model, data_loader, loss_fn, device):
     return avg_loss, accuracy
 
 
-# Treniruojame
+# Train
 model.train()
 for epoch in range(EPOCHS):
     start_time = time.time()
@@ -205,35 +205,31 @@ for epoch in range(EPOCHS):
     print(f"Epoch {epoch + 1}/{EPOCHS}: "
           f"Train Loss = {train_loss:.4f}, Train Acc = {train_acc:.4f}, "
           f"Val Loss = {val_loss:.4f}, Val Acc = {val_acc:.4f}")
-    print(f"Epoch {epoch + 1} trukmė: {epoch_time / 60:.2f} min")
-    print(f"GPU naudota atmintis (maks): {max_memory:.2f} GB")
+    print(f"Epoch {epoch + 1} duration: {epoch_time / 60:.2f} min")
+    print(f"Used VRAM memory (maks): {max_memory:.2f} GB")
 
-print(f"\nBendras treniravimo laikas: {total_training_time / 60:.2f} min ({total_training_time / 3600:.2f} val)")
+print(f"\nTotal training time: {total_training_time / 60:.2f} min ({total_training_time / 3600:.2f} val)")
 
-# Išsaugome modelį
+# Save model
 model.save_pretrained("distilbert_qa_model_v2_torch")
 tokenizer.save_pretrained("distilbert_tokenizer_v2_torch")
 # -------------------------------------
-# 5. Įkeliamas modelis ir tokenaizeris
+# 5. Load the model and tokenizer
 # -------------------------------------
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = DistilBertForQuestionAnswering.from_pretrained("distilbert_qa_model_v2_torch").to(device)
 tokenizer = DistilBertTokenizerFast.from_pretrained("distilbert_tokenizer_v2_torch")
-print(f"CPU RAM naudojimas po tokenizer: {psutil.virtual_memory().used / 1e9:.2f} GB")
+print(f"CPU and RAM usage after tokenizer: {psutil.virtual_memory().used / 1e9:.2f} GB")
 
+# -------------------------------------
+# 6. Functions to generate an answer from the question and context
+# -------------------------------------
 
+# Compute ROUGE-L F1 score between the prediction and ground truth
 def compute_rougeL(prediction, ground_truth):
     scores = scorer.score(ground_truth, prediction)
     return scores['rougeL'].fmeasure
-
-
-# -------------------------------------
-# 6. Funkcijos: generuoti atsakymą iš klausimo ir konteksto
-# -------------------------------------
-
-
-# Atsakymo gavimo funkcija
 
 
 def get_answer(question, context):
@@ -260,7 +256,7 @@ def get_answer(question, context):
 
 
 # -------------------------------------
-# 7. Funkcija: EM ir F1 skaičiavimas
+# 7. Function to compute EM and F1 scores
 # -------------------------------------
 def compute_em_and_f1(prediction, ground_truth):
     def normalize(text):
@@ -283,10 +279,10 @@ def compute_em_and_f1(prediction, ground_truth):
     return em, f1
 
 # -------------------------------------
-# 8. Funkcija: modelio testavimas JSON formatu
+# 8. Function to test the model using JSON format
 # -------------------------------------
 
-def evaluate_distilbert_model(path, label=None, output_file="rezultatai.txt"):
+def evaluate_distilbert_model(path, label=None, output_file="results.txt"):
     em_list = []
     f1_list = []
     rougeL_list = []
@@ -296,10 +292,10 @@ def evaluate_distilbert_model(path, label=None, output_file="rezultatai.txt"):
         with open(path, "r", encoding="utf-8") as f:
             test_data = json.load(f)
     except Exception as e:
-        print(f"Klaida skaitant {path}: {e}")
+        print(f"Error while reading {path}: {e}")
         return
 
-    header = f"\nTestavimas: {label or path}\n{'-' * 40}"
+    header = f"\nTesting: {label or path}\n{'-' * 40}"
     print(header)
     output_lines.append(header)
 
@@ -318,8 +314,8 @@ def evaluate_distilbert_model(path, label=None, output_file="rezultatai.txt"):
 
         result_str = (
             f"{i + 1}. Q: {question}\n"
-            f"Modelio atsakymas: {predicted}\n"
-            f"Tikslus atsakymas: {expected}\n"
+            f"Model answer: {predicted}\n"
+            f"Exact answer: {expected}\n"
             f"EM: {em}, F1: {round(f1, 3)}, ROUGE-L: {round(rougeL, 3)}\n"
         )
         print(result_str)
@@ -330,7 +326,7 @@ def evaluate_distilbert_model(path, label=None, output_file="rezultatai.txt"):
     avg_rougeL = sum(rougeL_list) / len(rougeL_list) if rougeL_list else 0.0
 
     summary = (
-        f"\nBENDRI REZULTATAI ({label or path}):\n"
+        f"\nTotal results ({label or path}):\n"
         f" EM: {round(avg_em * 100, 2)}%\n"
         f"F1: {round(avg_f1 * 100, 2)}%\n"
         f"ROUGE-L: {round(avg_rougeL * 100, 2)}%\n"
@@ -340,15 +336,15 @@ def evaluate_distilbert_model(path, label=None, output_file="rezultatai.txt"):
 
     try:
         Path(output_file).write_text("\n".join(output_lines), encoding="utf-8")
-        print(f"Rezultatai įrašyti į: {output_file}")
+        print(f"Results saved to: {output_file}")
     except Exception as e:
-        print(f"Klaida įrašant rezultatus: {e}")
+        print(f"Error while saving results: {e}")
 
 
-print(f"CPU RAM naudojimas prieš evaluete: {psutil.virtual_memory().used / 1e9:.2f} GB")
+print(f"CPU and RAM usage before: {psutil.virtual_memory().used / 1e9:.2f} GB")
 
 
-evaluate_distilbert_model("reikalavimu-testas-30.json", label="Reikalavimų testas 30",
-                          output_file="reikalavimu_rezultatai_30-distilbert.txt")
+evaluate_distilbert_model("requirements-test-30.json", label="Requirements test 30",
+                          output_file="requirement_results_30-distilbert.txt")
 
-print("Darbas baigtas Distilbert")
+print("Distilbert process finished")
