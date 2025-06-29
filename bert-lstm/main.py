@@ -138,13 +138,14 @@ class QADiskDataset(Dataset):
 # 6. LSTM model
 # -----------------------------
 class QALSTMModel(nn.Module):
-    def __init__(self, input_size=768, lstm1_size=512, lstm2_size=256, lstm3_size=256, dense_size=256):
+    def __init__(self, input_size=768, lstm1_size=1024, lstm2_size=512, lstm3_size=512, dense_size=512):
         super(QALSTMModel, self).__init__()
         self.lstm1 = nn.LSTM(input_size, lstm1_size, batch_first=True)
         self.dropout1 = nn.Dropout(0.1)
         self.lstm2 = nn.LSTM(lstm1_size, lstm2_size, batch_first=True)
         self.dropout2 = nn.Dropout(0.1)
         self.lstm3 = nn.LSTM(lstm2_size, lstm3_size, batch_first=True)
+        self.dropout3 = nn.Dropout(0.1)
         self.projection = nn.Linear(lstm3_size, dense_size)
         self.start_out = nn.Linear(dense_size, 1)
         self.end_out = nn.Linear(dense_size, 1)
@@ -155,6 +156,7 @@ class QALSTMModel(nn.Module):
         x, _ = self.lstm2(x)
         x = self.dropout2(x)
         x, _ = self.lstm3(x)
+        x = self.dropout3(x)
         x = F.relu(self.projection(x))
         start_logits = self.start_out(x).squeeze(-1)
         end_logits = self.end_out(x).squeeze(-1)
