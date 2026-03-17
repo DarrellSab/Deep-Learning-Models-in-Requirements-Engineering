@@ -1,0 +1,602 @@
+[
+  {
+    "question": "What is the key guiding principle behind the functional design of CCTNS V1.0?",
+    "context": "The key guiding principle behind the functional design of CCTNS V1.0 is to focus on the critical functionality that provides value to the police personnel at the cutting edge which in turn can improve the outcomes in the areas of \"Investigation of Crime\" and \"Detection of Criminals\".",
+    "expected_answer": "To focus on critical functionality providing value to police personnel at the cutting edge"
+  },
+  {
+    "question": "Which module acts as a conduit for information exchange between citizens and police?",
+    "context": "The Citizen Interface module of the CCTNS acts as a conduit for the information exchange between citizens and police units/personnel.",
+    "expected_answer": "Citizen Interface module"
+  },
+  {
+    "question": "What is the primary function of the Investigation module?",
+    "context": "The Investigation module of the CCTNS facilitates the investigation process and introduces operational efficiencies by automating most of the tasks that take place after initial entries are made during Registration.",
+    "expected_answer": "Facilitate the investigation process and introduce operational efficiencies"
+  },
+  {
+    "question": "What does the Prosecution module help with regarding court interactions?",
+    "context": "The Prosecution module of the CCTNS aids this interfacing by providing a platform to record entries of the court interactions.",
+    "expected_answer": "Providing a platform to record entries of court interactions"
+  },
+  {
+    "question": "What types of queries can police personnel execute using the Search module?",
+    "context": "Using the search functionality, police personnel can search for a particular person, type of crime, modus operandi, property etc.",
+    "expected_answer": "Particular person, type of crime, modus operandi, property"
+  },
+  {
+    "question": "What information is displayed by the Navigation module's landing pages?",
+    "context": "It shows information such as cases assigned, alerts, pending tasks etc hence helping police personnel to plan better and execute with greater efficiency.",
+    "expected_answer": "Cases assigned, alerts, pending tasks"
+  },
+  {
+    "question": "What is the role of the Configuration module?",
+    "context": "The Configuration module of the CCTNS helps keep the application configured according to the states' requirements in addition to keeping data elements/rules up to date.",
+    "expected_answer": "Keep the application configured to state requirements and data elements/rules up to date"
+  },
+  {
+    "question": "How should the help material be accessible to users?",
+    "context": "The help should be accessible to the users both in the offline and online mode.",
+    "expected_answer": "Both in offline and online mode"
+  },
+  {
+    "question": "What capability should the Support module provide regarding defect tracking?",
+    "context": "The solution should enable the user to track the submitted defect or enhancement request.",
+    "expected_answer": "Enable the user to track submitted defects or enhancement requests"
+  },
+  {
+    "question": "What is an audit trail in the context of the CCTNS system?",
+    "context": "An audit trail is a record of actions taken by either the user or the system triggers. This includes actions taken by users or Administrators, or actions initiated automatically by the system.",
+    "expected_answer": "A record of actions taken by either the user or the system triggers"
+  },
+  {
+    "question": "What specific information must the audit trail capture for critical entities?",
+    "context": "The System must keep an unalterable audit trail capable of automatically capturing and storing information about: All the actions (create/read/update/delete)... The user initiating... The date and time.",
+    "expected_answer": "All actions (CRUD), the user initiating the action, and the date and time"
+  },
+  {
+    "question": "How long must the system maintain the audit trail?",
+    "context": "The System must maintain the audit trail for as long as required, which will be at least for the life of the case to which it refers.",
+    "expected_answer": "At least for the life of the case to which it refers"
+  },
+  {
+    "question": "Who has the authority to set up user profiles and allocate users to groups?",
+    "context": "The System must allow only admin-users to set up user profiles and allocate users to groups.",
+    "expected_answer": "Only admin-users"
+  },
+  {
+    "question": "What is the most stringent response the system can give if a user requests a case they cannot access?",
+    "context": "do not display any case information or indicate its existence in any way.",
+    "expected_answer": "Do not display any case information or indicate its existence"
+  },
+  {
+    "question": "What requirement ensures error messages are helpful to the user?",
+    "context": "All error messages produced by the System must be meaningful... Ideally, each error message will be accompanied by explanatory text and an indication of the action(s) which the user can take.",
+    "expected_answer": "They must be meaningful and include explanatory text and actionable steps"
+  },
+  {
+    "question": "What ISO standard should the user interfaces comply with?",
+    "context": "The user interfaces of the system should comply with Standard ISO 9241.",
+    "expected_answer": "ISO 9241"
+  },
+  {
+    "question": "How should the system handle non-text media objects like images or video?",
+    "context": "All non-text media objects, such as graphical images or video, should be provided with alternative equivalent textual descriptions and/or with equivalent text-based functionality.",
+    "expected_answer": "Provide alternative equivalent textual descriptions or functionality"
+  },
+  {
+    "question": "What is the guideline for using splash screens?",
+    "context": "Splash screens should be avoided unless they provide useful content or feedback about the application state to the user.",
+    "expected_answer": "Avoid them unless they provide useful content or feedback"
+  },
+  {
+    "question": "What is the recommendation regarding vertical scrolling?",
+    "context": "Vertical scrolling should be minimized. This may be done by placing important information at the top and providing links to information that is further down the page.",
+    "expected_answer": "It should be minimized"
+  },
+  {
+    "question": "What is the response time requirement for a simple search?",
+    "context": "The System must be able to perform a simple search within 5-8 seconds... regardless of the storage capacity or number of cases in the system.",
+    "expected_answer": "Within 5-8 seconds"
+  },
+  {
+    "question": "What is the response time requirement for an advanced search?",
+    "context": "The System must be able to perform... a advanced search (multiple search criteria) within 10-15 seconds regardless of the storage capacity or number of cases in the system.",
+    "expected_answer": "Within 10-15 seconds"
+  },
+  {
+    "question": "What are the three guiding principles for the functional architecture (3 C's)?",
+    "context": "The 3 C's (Core-Configuration-Customization) forms the guiding principle for the architecture.",
+    "expected_answer": "Core, Configuration, and Customization"
+  },
+  {
+    "question": "What architectural style should the system implementation follow?",
+    "context": "The system should be implemented using Service Oriented Architecture (SOA) and have a modular design.",
+    "expected_answer": "Service Oriented Architecture (SOA)"
+  },
+  {
+    "question": "What communication protocol is mandated for the system?",
+    "context": "The system should use HTTPS as the communication protocol, i.e., HTTP over an encrypted secure socket layer (SSL).",
+    "expected_answer": "HTTPS"
+  },
+  {
+    "question": "How should the system handle data deletion to ensure security?",
+    "context": "Do not allow hard delete and perform only soft tagging the row for deletion.",
+    "expected_answer": "Do not allow hard delete; perform soft tagging"
+  },
+  {
+    "question": "What security measure should be used to prevent SQL Injection?",
+    "context": "The system should ensure high standards of security and access control through... Prevent SQL Injection... Utilize parameterized queries.",
+    "expected_answer": "Utilize parameterized queries"
+  },
+  {
+    "question": "How should static content be hosted to improve performance?",
+    "context": "Host all the static content (documents, images) on the web server.",
+    "expected_answer": "On the web server"
+  },
+  {
+    "question": "How should search results be fetched from the database?",
+    "context": "The search results should be fetched from the database in batches of 10 or 20 maximum as configured within the application.",
+    "expected_answer": "In batches of 10 or 20 maximum"
+  },
+  {
+    "question": "What technology should be leveraged to improve user experience?",
+    "context": "Use of AJAX based technology to improve user experience. Aggressive page loading to be considered based on the screen and estimate usage pattern.",
+    "expected_answer": "AJAX based technology"
+  },
+  {
+    "question": "What mechanism should be used for the most frequently used searches?",
+    "context": "A hierarchical cache should be configured and used for caching of results of most frequently used searches.",
+    "expected_answer": "Hierarchical cache"
+  },
+  {
+    "question": "What is the primary hardware implementation planned for Version 1 of the GAMMA-J Web Store?",
+    "context": "This document will outline all of the functions, capabilities and requirements for Version 1 of GAMMA-J's Web Store. Version 1 is planned for implementation on a \"plug and play\" USB Key.",
+    "expected_answer": "Plug and play USB Key"
+  },
+  {
+    "question": "What is the minimum inventory capacity the system must support?",
+    "context": "The initial inventory will be 100 items. Expandable with unique codes, the owners can purchase to expand the inventory. The minimum total inventory will be 20,000 items.",
+    "expected_answer": "20,000 items"
+  },
+  {
+    "question": "Which security protocol is used to transmit private documents via the internet?",
+    "context": "According to GAMMA-J's Functional Needs Statement this Web Store will use Secure Socket Layer (SSL) for security.",
+    "expected_answer": "Secure Socket Layer (SSL)"
+  },
+  {
+    "question": "Who is responsible for updating inventory and product line descriptions?",
+    "context": "Sales Personnel: Is generally the owner of the Web Store tasked with updating inventory and product line descriptions. Once added, sales personnel can add, delete and change descriptions.",
+    "expected_answer": "Sales Personnel"
+  },
+  {
+    "question": "What operating system is the Web Store designed to run on?",
+    "context": "Web Store shall operate on an Intel based system with Slackware Linux 2.6 and Apache Web Server. The operating system is designed by the Yoggie Corporation.",
+    "expected_answer": "Slackware Linux 2.6"
+  },
+  {
+    "question": "Which database format is required for the system due to its wide use?",
+    "context": "Must use a SQL based database. SQL standard is the most widely used database format. Restricting to SQL allows easy of use and compatibility for Web Store.",
+    "expected_answer": "SQL based database"
+  },
+  {
+    "question": "How are products organized within the Inventory Management system?",
+    "context": "Inventory management will allow for the placement of products into multi-tiered categories. A category can contain sub categories or products.",
+    "expected_answer": "In multi-tiered categories"
+  },
+  {
+    "question": "What function allows the system to be tailored to specific needs via custom software?",
+    "context": "The system will feature an API to allow customers to build custom plug-ins to be able to meet their needs. This is a high priority system feature as it ensures the flexibility of the system.",
+    "expected_answer": "Plug-in API"
+  },
+  {
+    "question": "How fast must the system be operational after the USB is plugged in?",
+    "context": "Upon the USB being plugged in the system shall be able to be deployed and operational in less than 1 minute.",
+    "expected_answer": "Less than 1 minute"
+  },
+  {
+    "question": "What is the concurrency requirement for customer logins?",
+    "context": "The system shall be able to handle 1000 customers logged in concurrently at the same time.",
+    "expected_answer": "1000 customers"
+  },
+  {
+    "question": "What is the maximum response time for searching for a specified product?",
+    "context": "The system shall be able to search for a specified product in less than 1 second.",
+    "expected_answer": "Less than 1 second"
+  },
+  {
+    "question": "What specific algorithm does the system use to perform searches?",
+    "context": "The system shall perform searches via Dijkstra's shortest path algorithm.",
+    "expected_answer": "Dijkstra's shortest path algorithm"
+  },
+  {
+    "question": "How does the system handle image files that are too large?",
+    "context": "The system shall automatically compress image files that are too large in size.",
+    "expected_answer": "Automatically compresses them"
+  },
+  {
+    "question": "What technique is used to ensure faster execution of pages?",
+    "context": "The system will employ on demand asynchronous loading for faster execution of pages.",
+    "expected_answer": "On demand asynchronous loading"
+  },
+  {
+    "question": "How does the system protect against IP DOS attacks?",
+    "context": "The system shall auto detect IP DOS attacks and block IP automatically.",
+    "expected_answer": "Auto detect and block IP automatically"
+  },
+  {
+    "question": "What open source firewall is used to protect the system?",
+    "context": "The system shall be protected by open source firewall called Firestarter.",
+    "expected_answer": "Firestarter"
+  },
+  {
+    "question": "What happens if a customer forgets their password during login?",
+    "context": "If the Customer enters incorrect login information, the system prompts the Customer to resend login details to the email account.",
+    "expected_answer": "System prompts to resend login details to email"
+  },
+  {
+    "question": "What document is generated for the customer after a purchase is confirmed?",
+    "context": "The customer will then receive a confirmation email with the specific order details.",
+    "expected_answer": "Confirmation email"
+  },
+  {
+    "question": "What is the specific format requirement for the Item ID?",
+    "context": "Item ID = ID that uniquely identified the selected item; a 7-digit system generated alphanumeric character.",
+    "expected_answer": "7-digit system generated alphanumeric character"
+  },
+  {
+    "question": "What hardware chipset is required for the system?",
+    "context": "The system shall adhere to the following hardware requirements: Intel XScale PXA270 520-MHz chipset.",
+    "expected_answer": "Intel XScale PXA270 520-MHz chipset"
+  },
+  {
+    "question": "How much SDRAM is required for the hardware?",
+    "context": "The system shall adhere to the following hardware requirements: 128MB SDRAM.",
+    "expected_answer": "128MB"
+  },
+  {
+    "question": "What is the default quantity when a customer adds an item to the cart?",
+    "context": "Quantity: the number of units of each selected item that the customer is ordering: default = 1.",
+    "expected_answer": "1"
+  },
+  {
+    "question": "Which web browsers are explicitly listed as compatible in the Operating Environment?",
+    "context": "Web Store shall operate with the following internet browsers: Microsoft Internet Explorer version 6 and 7, Netscape Communicator Version 4 and 5.",
+    "expected_answer": "Microsoft Internet Explorer (6 and 7) and Netscape Communicator (4 and 5)"
+  },
+  {
+    "question": "What is the maximum time allowed for the system to add a product to the shopping cart?",
+    "context": "The system shall be able to add product to shopping cart in less than 2ms.",
+    "expected_answer": "Less than 2ms"
+  },
+  {
+    "question": "How does the system ensure data safety regarding backups?",
+    "context": "The system will do periodic backups through a live internet connection.",
+    "expected_answer": "Periodic backups through a live internet connection"
+  },
+  {
+    "question": "What functionality is provided to the System Administrator regarding user accounts?",
+    "context": "The administrator will be in charge of assigning privileges of accounts. It generally allows users to create, edit, and view accounts information.",
+    "expected_answer": "Assigning privileges, creating, editing, and viewing account information"
+  },
+  {
+    "question": "What happens automatically when an administrator uploads a patch?",
+    "context": "System automatically installs patches and reinitializes software. The system then confirms that the patch has been successfully installed.",
+    "expected_answer": "System installs patches and reinitializes software"
+  },
+  {
+    "question": "What is the availability requirement stated in the Project Scope?",
+    "context": "According to GAMMA-J's Functional Needs Statement this Web Store will have an availability of 99.999%.",
+    "expected_answer": "99.999%"
+  },
+  {
+    "question": "What feature allows for future software enhancement?",
+    "context": "Feature interface for future software enhancement via \"Plug-ins\". Advanced needs can be added in the future via \"plug-ins.\"",
+    "expected_answer": "Plug-ins"
+  },
+  {
+    "question": "What does the system use to store inventory information?",
+    "context": "OE-3: The system shall use SQL based database to store inventory information.",
+    "expected_answer": "SQL based database"
+  },
+  {
+    "question": "What is the primary purpose of the IUFA's UUIS?",
+    "context": "IUFA purpose is to integrate 3 faculties data bases providing Web interface that allows user to access and manage the integrated inventory. [cite: 1157]",
+    "expected_answer": "Integrate 3 faculties data bases"
+  },
+  {
+    "question": "What are the three specific types of assets classified in the inventory?",
+    "context": "Assets in the inventory are classified in 3 types: Rooms and space, Software licences, and All other assets. [cite: 1177, 1178, 1179, 1180]",
+    "expected_answer": "Rooms and space, Software licences, and All other assets"
+  },
+  {
+    "question": "Which administrative level represents the University level in the user hierarchy?",
+    "context": "Three administrative levels that can approve inventory transactions include the University level (level 3). [cite: 1203, 1204]",
+    "expected_answer": "Level 3"
+  },
+  {
+    "question": "What role does the 'Level 4' user play in the system?",
+    "context": "Level 4 is the IT and security level to maintain the inventory. [cite_start]Level 4 has all possible permissions. [cite: 1208, 1271]",
+    "expected_answer": "IT and security level / Maintain the inventory"
+  },
+  {
+    "question": "Who has control over the entire inventory?",
+    "context": "University administrator and IT Administrators have the control on the entire inventory. [cite: 1226, 1227]",
+    "expected_answer": "University administrator and IT Administrators"
+  },
+  {
+    "question": "What is the only permission granted to Level 0 users?",
+    "context": "Level 0 has the permission to create requests only. [cite: 1268]",
+    "expected_answer": "Create requests only"
+  },
+  {
+    "question": "How is an asset transfer handled within the same department?",
+    "context": "Within the same department: data base can be updated directly without any request. [cite: 1277]",
+    "expected_answer": "Database updated directly without request"
+  },
+  {
+    "question": "Who must approve an inventory transfer outside the university?",
+    "context": "Transfer outside university should be approved by the university group. [cite: 1280]",
+    "expected_answer": "The university group"
+  },
+  {
+    "question": "Which field of an asset cannot be modified during an edit?",
+    "context": "All fields of an edited asset can be modified except Ids. [cite: 1285]",
+    "expected_answer": "Ids"
+  },
+  {
+    "question": "What method can be used to add many assets to the inventory at once?",
+    "context": "A bulk entry can be used to add many assets. [cite: 1290]",
+    "expected_answer": "Bulk entry"
+  },
+  {
+    "question": "Who is authorized to create a new space or modify floor structure?",
+    "context": "IT group members can create a new space and modify floor structure when they receive an exception request from any administrative level. [cite: 1297]",
+    "expected_answer": "IT group members"
+  },
+  {
+    "question": "How are users notified when their request is treated?",
+    "context": "When request is treated user is notified by email. [cite: 1301]",
+    "expected_answer": "By email"
+  },
+  {
+    "question": "What happens if an inventory administrator delegates their authorized actions to another user?",
+    "context": "Any administrative level user can delegate another user to execute some or all his authorized actions. [cite_start]And this user acquires the role of inventory administrator. [cite: 1310, 1311]",
+    "expected_answer": "The user acquires the role of inventory administrator"
+  },
+  {
+    "question": "What are the three specific output reports the system must generate?",
+    "context": "Output reports include: Asset report by location, Request report, and User permission user. [cite: 1314, 1315, 1316]",
+    "expected_answer": "Asset report by location, Request report, User permission report"
+  },
+  {
+    "question": "What is the maximum mandatory learning time for the system?",
+    "context": "It is mandatory that learning time is between 2 to 4 hours at maximum, because many task are delegated to working students. [cite: 1318]",
+    "expected_answer": "2 to 4 hours"
+  },
+  {
+    "question": "When should maintenance or backup operations be conducted?",
+    "context": "The Application should be available always at working hours. [cite_start]Any maintenance or backup operation should be conducted out of working time. [cite: 1322]",
+    "expected_answer": "Out of working time"
+  },
+  {
+    "question": "Which specific web browsers must the application support?",
+    "context": "Web application should available to run on browsers like IE, Firefox, Chrome, Opera or Safari. [cite: 1325]",
+    "expected_answer": "IE, Firefox, Chrome, Opera, or Safari"
+  },
+  {
+    "question": "What is the performance constraint regarding query execution time?",
+    "context": "Query is killed if takes more than 1 min. [cite: 1330]",
+    "expected_answer": "Killed if takes more than 1 min"
+  },
+  {
+    "question": "What are the preconditions for the 'Modify Use Case'?",
+    "context": "Preconditions: The Inventory Admin is authenticated. [cite: 1341, 1342]",
+    "expected_answer": "Inventory Admin is authenticated"
+  },
+  {
+    "question": "In the 'Add New Asset' use case, what happens if the asset type does not exist?",
+    "context": "Administrator send exception request to IT to add the new type and the common properties. [cite: 1461]",
+    "expected_answer": "Administrator sends exception request to IT"
+  },
+  {
+    "question": "What allows users to add multiple assets in the 'Advanced Request' form?",
+    "context": "User can add as many assets as he wants to the list by clicking add another asset button. [cite: 1504]",
+    "expected_answer": "Clicking 'add another asset' button"
+  },
+  {
+    "question": "What occurs if a user attempts to borrow an asset that is not available?",
+    "context": "Exceptional Course: Asset not available to be borrowed. [cite_start]Error Message is displayed. [cite: 1513, 1514]",
+    "expected_answer": "Error Message is displayed"
+  },
+  {
+    "question": "What constraint applies to an administrator when changing user permissions?",
+    "context": "Administrator cannot assigne permissions more than he have. [cite: 1631]",
+    "expected_answer": "Cannot assign permissions more than they have"
+  },
+  {
+    "question": "What features are available when generating a report?",
+    "context": "General report is displayed. Report can be filtered. [cite_start]Fields can be sorted. [cite: 1759, 1760, 1761]",
+    "expected_answer": "Filtering and sorting fields"
+  },
+  {
+    "question": "What is the estimated total cost of the project according to the COCOMO estimation?",
+    "context": "Project Total = $22,400.00. [cite: 1888]",
+    "expected_answer": "$22,400.00"
+  },
+  {
+    "question": "What is the estimated effort in Person Months (PM) for the project?",
+    "context": "1120 hours (/160h) = 7 person months. [cite: 1883]",
+    "expected_answer": "7 person months"
+  },
+  {
+    "question": "What hourly pricing rate was used for the cost estimation?",
+    "context": "Pricing per hour = $20. [cite: 1887]",
+    "expected_answer": "$20"
+  },
+  {
+    "question": "Who can access and maintain the database servers locally?",
+    "context": "Only IT team member can access and maintain data base servers locally. [cite: 1329]",
+    "expected_answer": "Only IT team members"
+  },
+  {
+    "question": "What are the two types of search permissions defined?",
+    "context": "5. search permission: 5.1. search:simple, 5.2. search advanced. [cite: 1254, 1255, 1256]",
+    "expected_answer": "Simple search and advanced search"
+  },
+  {
+    "question": "What functionality is available to unauthorized users?",
+    "context": "The IUFA application give the unauthorised user the possibility to use a web based interface that will available to use any time. [cite: 1160]",
+    "expected_answer": "Use a web based interface"
+  },
+  {
+    "question": "What is the primary function of PeaZip?",
+    "context": "PeaZip is a general purpose file and archive manager application for a computer system, aiming to provide a cross-platform graphical interface for many Open Source archiving and compression utilities.",
+    "expected_answer": "General purpose file and archive manager application"
+  },
+  {
+    "question": "Who is the author of this requirements document?",
+    "context": "Prepared by Liles Athanasios-Alexandros, Software Engineering, AUTH.",
+    "expected_answer": "Liles Athanasios-Alexandros"
+  },
+  {
+    "question": "What was the initial goal of the PeaZip application?",
+    "context": "The initial goal of the application was to function as frontend for Pea archiving utility.",
+    "expected_answer": "To function as frontend for Pea archiving utility"
+  },
+  {
+    "question": "What type of CPU is required to run PeaZip?",
+    "context": "As far as hardware is concerned, PeaZip requires an x-86 compatible CPU, due to some performance critical sections written in ASM.",
+    "expected_answer": "x-86 compatible CPU"
+  },
+  {
+    "question": "Under which license is PeaZip distributed?",
+    "context": "This software's license is LGPL, which mean that PeaZip is 100% Open Source and 100% free.",
+    "expected_answer": "LGPL"
+  },
+  {
+    "question": "Which Integrated Development Environment (IDE) is used for PeaZip?",
+    "context": "Moreover, PeaZip is developed under the development environment Lazarus IDE.",
+    "expected_answer": "Lazarus IDE"
+  },
+  {
+    "question": "What programming languages are required for further development of PeaZip?",
+    "context": "Should anyone wish to work on further development of PeaZip knowledge in any of the following programming languages is required: Delphi/Kylix, Object Pascal, Pascal.",
+    "expected_answer": "Delphi/Kylix, Object Pascal, Pascal"
+  },
+  {
+    "question": "What does the 'System benchmark' utility measure?",
+    "context": "System benchmark utility, rates the host system in terms of MIPS (millions of integer instructions per second) and Core 2 Duo equivalent speed in MHz.",
+    "expected_answer": "MIPS and Core 2 Duo equivalent speed in MHz"
+  },
+  {
+    "question": "What is the function of 'Secure file deletion'?",
+    "context": "Secure file deletion, intended for securely remove files and folders from disk, avoiding possible data recovery. This is implemented by multiple successive passes of the deletion procedure.",
+    "expected_answer": "Securely remove files avoiding data recovery"
+  },
+  {
+    "question": "List some of the read-only formats supported by PeaZip.",
+    "context": "Read-only (browsing and extraction) formats supported by PeaZip: 7z, 7z-sfx, ARC/WRC, BZ2/TBZ2, custom, GZ/TGZ, PAQ/LPAQ, PEA, QUAD/BALZ, split, TAR, UPX, ZIP, ACE, ARJ, CAB, CHM...",
+    "expected_answer": "7z, ARC, BZ2, GZ, PAQ, PEA, TAR, UPX, ZIP, ACE, ARJ, CAB, CHM"
+  },
+  {
+    "question": "What happens to the original archive after extraction?",
+    "context": "The archive, whose contents are extracted, is neither destroyed, nor deleted and it is not left empty. On the contrary, it retains its content and name.",
+    "expected_answer": "It retains its content and name"
+  },
+  {
+    "question": "What are the two factors used for authentication in PeaZip?",
+    "context": "Two factor authentication (password and optionally keyfile).",
+    "expected_answer": "Password and keyfile"
+  },
+  {
+    "question": "What is the name of the graphic wrapper used by PeaZip to display executed functions?",
+    "context": "PeaZip offers graphic display of the progress of any currently executed through/by it function, through its graphic wrapper, named PeaLauncher.",
+    "expected_answer": "PeaLauncher"
+  },
+  {
+    "question": "What functionality does the 'Toggle browse/flat view' feature provide?",
+    "context": "Toggle browse/flat view, displays all together the objects contained in the current path or in the archive.",
+    "expected_answer": "Displays all objects contained in the current path or archive together"
+  },
+  {
+    "question": "What operating systems is PeaZip compatible with?",
+    "context": "PeaZip is compatible with: All 64-bit versions of Microsoft Windows, All 32-bit Microsoft Windows... All POSIX(all versions of Linux/all versions of BSD/all UNIX-like operating systems).",
+    "expected_answer": "All 64-bit/32-bit Microsoft Windows and all POSIX systems"
+  },
+  {
+    "question": "What is the only hardware requirement explicitly stated for PeaZip's installation?",
+    "context": "The only thing PeaZip requires, as far as hardware is concerned, is an x-86 compatible CPU.",
+    "expected_answer": "x-86 compatible CPU"
+  },
+  {
+    "question": "Does PeaZip require installation of other software to work?",
+    "context": "In no case is the installation of any other program required for PeaZip to work.",
+    "expected_answer": "No"
+  },
+  {
+    "question": "What does the 'Split file' tool do?",
+    "context": "Split file and merge split volumes back to the original file.",
+    "expected_answer": "Splits files and merges split volumes back to original"
+  },
+  {
+    "question": "What does the 'Byte to byte file comparison' tool do?",
+    "context": "Byte to byte file comparison, which spots exactly what the different bytes are and is not susceptible to collisions.",
+    "expected_answer": "Spots exactly what the different bytes are"
+  },
+  {
+    "question": "How can a user quickly change the application's language?",
+    "context": "Localization, quickly changes application's language (the new selection can be made from a list of supported by PeaZip languages).",
+    "expected_answer": "By selecting Localization"
+  },
+  {
+    "question": "What does the shortcut F9 do in the file manager?",
+    "context": "F9 - set password/keyfile",
+    "expected_answer": "Sets password/keyfile"
+  },
+  {
+    "question": "What does the shortcut F12 do?",
+    "context": "F12-create keyfile or random password",
+    "expected_answer": "Creates keyfile or random password"
+  },
+  {
+    "question": "What is required to extract content from encrypted archives?",
+    "context": "Extraction... shouldn't be allowed without inserting the correct password and (if existing) keyfile for authentication.",
+    "expected_answer": "Correct password and (if existing) keyfile"
+  },
+  {
+    "question": "What does POSIX stand for?",
+    "context": "POSIX: Portable Operating System Interface for UNIX.",
+    "expected_answer": "Portable Operating System Interface for UNIX"
+  },
+  {
+    "question": "What does MIPS stand for in the context of this document?",
+    "context": "MIPS: Millions of Instructions per Second. A unit for measuring the execution speed of a computer system's CPU.",
+    "expected_answer": "Millions of Instructions per Second"
+  },
+  {
+    "question": "What is a 'Frontend' defined as?",
+    "context": "The visible, user entry part of an application... responsible for collecting input... and processing it to conform to a specification the back-end can use.",
+    "expected_answer": "The visible, user entry part of an application"
+  },
+  {
+    "question": "What is a 'Checksum'?",
+    "context": "Checksum: A fixed-size datum computed from an arbitrary block of digital data for the purpose of detecting accidental errors.",
+    "expected_answer": "A fixed-size datum for detecting accidental errors"
+  },
+  {
+    "question": "What allows PeaZip to run without installation?",
+    "context": "PeaZip Portable is available as standalone application, not needing installation and not modifying the host system.",
+    "expected_answer": "PeaZip Portable version"
+  },
+  {
+    "question": "What happens when you drag an archived object from PeaZip to the system?",
+    "context": "Dragging an archived object (file or archive) from PeaZip to the system, will extract it to the location (of the computer system) where it is dropped.",
+    "expected_answer": "It extracts the object to the dropped location"
+  },
+  {
+    "question": "What information does the 'System tools' menu collect?",
+    "context": "System tools, collects system's disk utilities (clean, defrag, manage, remove), system management tools (control panel, computer management, task manager) and displays environment variables.",
+    "expected_answer": "Disk utilities, system management tools, and environment variables"
+  }
+]
